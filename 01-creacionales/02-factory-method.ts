@@ -12,3 +12,80 @@
  * https://refactoring.guru/es/design-patterns/factory-method
  *
  */
+import {COLORS} from '../helpers/colors.ts'
+interface Hamburger{
+    prepare():void;
+
+}
+
+class ChikenHamburger implements Hamburger{
+    prepare(): void {
+        console.log('Preparando una hamburguesa de %cpollo', COLORS.yellow)
+    }
+
+}
+
+class BeefHamburger implements Hamburger{
+    prepare(): void {
+        console.log('Preparando una hamburguesa de %cres', COLORS.brown)
+    }
+
+}
+class BeanHamburger implements Hamburger{
+    prepare(): void {
+        console.log('Preparando una hamburguesa de %cfrijol', COLORS.green)
+    }
+
+}
+
+abstract class Restaurant {
+    protected abstract createHamburger():Hamburger
+
+    orderHamburger():void {
+        const hamburger = this.createHamburger()
+        hamburger.prepare()
+    }
+}
+
+class ChikenRestaurant extends Restaurant {
+    override createHamburger(): Hamburger {
+        return new ChikenHamburger()
+    }
+}
+class BeefRestaurant extends Restaurant {
+    override createHamburger(): Hamburger {
+        return new BeefHamburger()
+    }
+}
+class BeanRestaurant extends Restaurant {
+    override createHamburger(): Hamburger {
+        return new BeanHamburger()
+    }
+}
+
+function main(){
+    let restaurant:Restaurant
+
+    const burgerType = prompt('Que tipo de hamburguesa quieres?')
+
+    switch(burgerType){
+        case 'chiken':
+            restaurant = new ChikenRestaurant()
+        break
+
+        case 'beef':
+            restaurant = new BeefRestaurant()
+        break
+
+        case 'bean':
+            restaurant = new BeanRestaurant()
+        break
+
+        default:
+            throw new Error('Opcion no valida')
+    }
+
+    restaurant.orderHamburger()
+}
+
+main()
